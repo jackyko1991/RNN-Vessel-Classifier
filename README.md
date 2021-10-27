@@ -1,2 +1,4 @@
-# SGT-Vessel-Classifier
-Vascular model classifier using sequence embedded centerline
+# RNN-Vessel-Classifier
+Vascular model classifier using recurrent neural network
+
+## References
