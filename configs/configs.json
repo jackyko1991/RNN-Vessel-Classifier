@@ -1,0 +1,81 @@
+{
+    "ProjectName": "RNN-Vessel-Classifier",
+    "ProjectDetail": {
+        "Description": "To detect stroke types with recurrent neural network with vessel centerlines.",
+        "Modality": "CT"
+    },
+    "Network":{
+        "Name":"LTSM",
+        "HiddenStates": 25,
+        "Dropout":0.05
+    },
+    "TrainingSetting":
+    {
+        "Data": {
+            "TrainingDataDirectory":"/home/jacky/data_disk/data/carotid/data_kfold/fold_0/train",
+            "TestingDataDirectory": "/home/jacky/data_disk/data/carotid/data_kfold/fold_0/test",
+            "CenterlineFilename": "centerline.vtp",
+            "LabelFilename":"/home/jacky/data_disk/data/carotid/data_kfold/label.csv",
+            "AbscissasArrayName": "Abscissas_average",
+            "CenterlineIdsArrayName": "CenterlineIds_average",
+            "CaseColumnName": "case",
+            "Features": [
+                "Radius_average",
+                "Curvature_average",
+                "Torsion_average",
+                "p(mmHg)_average",
+                "U_average",
+                "vorticity_average",
+                "wallShearStress_average"
+            ],
+            "AdditionalFeaturesFilename": "./data/dataset_no_preprocessing/features.csv",
+            "AdditionalFeatures": ["Feature1","Feature2"],
+            "ClassNames":["Stroke","TIA","Dizziness","Asymptomatic"],
+            "Weights": [4.33,15.6,15.6,1.56]
+        },
+        "BatchSize": 32,
+        "ImageLog": false,
+        "Restore": false,
+        "LogDir": "/home/jacky/data_disk/tf_log/carotid_rnn/morph_cfd_lstm_fold_0_hidden_25/log",
+        "CheckpointDir": "/home/jacky/data_disk/tf_log/carotid_rnn/morph_cfd_lstm_fold_0_hidden_25/ckpt",
+        "Testing": true,
+        "Epoches": 10000,
+        "MaxSteps": 1e4,
+        "LogInterval": 50,
+        "TestingStepInterval":10,
+        "LossFunction":{
+            "Name": "xent",
+            "Multiclass/Multilabel": "Multiclass"
+        },
+        "Optimizer":{
+            "Name": "Momentum",
+            "InitialLearningRate": 1e-4,
+            "Momentum":0.9,
+            "Decay":{
+                "Factor": 0.95,
+                "Step": 100
+            }
+        }
+    },
+    "PredictionSetting":{
+        "Data":{
+            "EvaluationDataDirectory":"/home/jacky/data_disk/data/carotid/data_kfold/fold_0/train",
+            "CenterlineFilename": "centerline.vtp",
+            "AbscissasArrayName": "Abscissas_average",
+            "CenterlineIdsArrayName": "CenterlineIds_average",
+            "Features": [
+                "Radius_average",
+                "Curvature_average",
+                "Torsion_average",
+                "p(mmHg)_average",
+                "U_average",
+                "vorticity_average",
+                "wallShearStress_average"
+            ]
+        },
+        "OutputFilename":"/home/jacky/DIIR-JK-NAS/data/carotid/results/rnn_prediction_train.csv",
+        "ReportOutput": false,
+        "ModelPath": "/home/jacky/data_disk/tf_log/carotid_rnn/morph_cfd_lstm_fold_0_hidden_25/ckpt.bak/checkpoint-1868.meta",
+        "CheckPointPath": "/home/jacky/data_disk/tf_log/carotid_rnn/morph_cfd_lstm_fold_0_hidden_25/ckpt.bak/checkpoint-1868"
+    }
+}
